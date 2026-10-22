@@ -608,38 +608,38 @@
       return "Rp " + nominal.toLocaleString("id-ID");
     }
 
-    function buatKartuProduk(produk) {
-      const pesan = encodeURIComponent(
-        `Halo Dellaswan, saya mau pre-order ${produk.n} (250 gr).`
-      );
+   function buatKartuProduk(produk) {
+  // Format teks pesan tanpa karakter khusus berlebih
+  const teksPesan = `Halo Dellaswan, saya mau pre-order ${produk.n} (250 gr).`;
+  const pesanEncoded = encodeURIComponent(teksPesan);
 
-      return `
-        <article class="card">
-          <span class="size-chip">250 gr</span>
-          <div class="pic">
-            <img src="${produk.gambar}" alt="${produk.n}">
+  return `
+    <article class="card">
+      <span class="size-chip">250 gr</span>
+      <div class="pic">
+        <img src="${produk.gambar}" alt="${produk.n}">
+      </div>
+      <div class="info">
+        <h3>${produk.n}</h3>
+        <p>${produk.d}</p>
+        <div class="price-row">
+          <div class="price">
+            ${formatRupiah(produk.p)} <small>/ 250 gr</small>
           </div>
-          <div class="info">
-            <h3>${produk.n}</h3>
-            <p>${produk.d}</p>
-            <div class="price-row">
-              <div class="price">
-                ${formatRupiah(produk.p)} <small>/ 250 gr</small>
-              </div>
-            </div>
-            <a
-              class="btn"
-              href="https://wa.me/${WA}?text=${pesan}"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Pesan ${produk.n} lewat WhatsApp"
-            >
-              Pesan lewat WhatsApp
-            </a>
-          </div>
-        </article>
-      `;
-    }
+        </div>
+        <a
+          class="btn"
+          href="https://api.whatsapp.com/send?phone=${WA}&text=${pesanEncoded}"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Pesan ${produk.n} lewat WhatsApp"
+        >
+          Pesan lewat WhatsApp
+        </a>
+      </div>
+    </article>
+  `;
+}
 
     document.getElementById("gridPisang").innerHTML = PISANG.map(buatKartuProduk).join("");
     document.getElementById("gridBasreng").innerHTML = BASRENG.map(buatKartuProduk).join("");
